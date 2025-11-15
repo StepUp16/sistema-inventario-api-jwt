@@ -40,6 +40,10 @@ public class ProductController {
     public ResponseEntity<ProductsDTO> createItem(@RequestBody ProductsDTO product) {
         try {
             ProductsDTO created = productServices.save(product);
+            created.setMsj("Producto creado exitosamente");
+            // LOG DE ÉXITO AÑADIDO
+            log.info("Producto creado correctamente: ID {}", created.getCode());
+
             return ResponseEntity.ok(created);
         } catch (Exception e) {
             log.error("Error al crear producto", e);
@@ -53,8 +57,13 @@ public class ProductController {
         try {
             ProductsDTO updated = productServices.update(product);
             if (updated != null) {
+                updated.setMsj("Producto actualizado exitosamente");
+                // LOG DE ÉXITO AÑADIDO
+                log.info("Producto actualizado correctamente: ID {}", updated.getCode());
+
                 return ResponseEntity.ok(updated);
             } else {
+                log.warn("Intento de actualizar producto inexistente: ID {}", product.getCode());
                 return ResponseEntity.notFound().build(); // 404 si no existe el ID
             }
         } catch (Exception e) {
@@ -68,6 +77,7 @@ public class ProductController {
     public ResponseEntity<Void> deleteItem(@PathVariable("id") Integer id) {
         try {
             productServices.delete(id);
+            log.info("Producto eliminado correctamente: ID {}", id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             log.error("Error al eliminar producto", e);

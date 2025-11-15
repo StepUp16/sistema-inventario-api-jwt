@@ -27,7 +27,7 @@ public class ProductsImpl implements ProductServices {
         List<Product> items = this.productRepository.findAll();
         for (Product item : items) {
             // Convertimos Entidad -> DTO
-            result.add(new ProductsDTO(item.getCode(), item.getName(), item.isStatus()));
+            result.add(new ProductsDTO(item.getCode(), item.getName(), "", item.isStatus()));
         }
         return result;
     }
@@ -43,7 +43,7 @@ public class ProductsImpl implements ProductServices {
         Product guardado = this.productRepository.save(entidad);
 
         // Retornamos el DTO con el ID generado
-        return new ProductsDTO(guardado.getCode(), guardado.getName(), guardado.isStatus());
+        return new ProductsDTO(guardado.getCode(), guardado.getName(), "Producto creado exitosamente", guardado.isStatus());
     }
 
     @Override
@@ -56,7 +56,7 @@ public class ProductsImpl implements ProductServices {
             entidad.setStatus(productDto.isStatus());
 
             Product actualizado = this.productRepository.save(entidad);
-            return new ProductsDTO(actualizado.getCode(), actualizado.getName(), actualizado.isStatus());
+            return new ProductsDTO(actualizado.getCode(), actualizado.getName(), "Producto actualizado exitosamente", actualizado.isStatus());
         }
         return null; // O podrías lanzar una excepción si no existe
     }

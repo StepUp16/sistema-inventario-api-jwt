@@ -10,5 +10,6 @@ import lombok.NoArgsConstructor;
 public class ProductsDTO {
     private Integer code;
     private String name;
+    private String msj;
     private boolean status;
 }

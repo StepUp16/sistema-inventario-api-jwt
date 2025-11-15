@@ -6,6 +6,7 @@ import edu.sv.ues.dam235.apirestdemo.dtos.UserRegisterDTO;
 import edu.sv.ues.dam235.apirestdemo.services.AuthServices;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder; // Importante para el log de logout
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,11 @@ public class AuthController {
             if (token == null) {
                 return ResponseEntity.status(401).build();
             } else {
+                token.setMsj("Logueado exitosamente");
+
+                // 2. Log en consola del servidor
+                log.info("Usuario {} ha iniciado sesión correctamente", authRequest.getUser());
+
                 return ResponseEntity.ok(token);
             }
         } catch (Exception e) {
@@ -37,12 +43,13 @@ public class AuthController {
         }
     }
 
-    // --- NUEVO ENDPOINT DE REGISTRO ---
+    // --- ENDPOINT DE REGISTRO ---
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody UserRegisterDTO userDto) {
         try {
             boolean success = authServices.register(userDto);
             if (success) {
+                log.info("Usuario registrado: {}", userDto.getEmail()); // Log extra
                 return ResponseEntity.ok("Usuario registrado con éxito");
             } else {
                 return ResponseEntity.badRequest().body("Error: El usuario ya existe o datos inválidos");
@@ -52,9 +59,16 @@ public class AuthController {
             return ResponseEntity.internalServerError().build();
         }
     }
-    // --- ENDPOINT DE LOGOUT
+
+    // --- ENDPOINT DE LOGOUT ---
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
-        return ResponseEntity.ok("{\"message\": \"Logout exitoso. Por favor elimine el token almacenado.\"}");
+        // Obtenemos el nombre del usuario actual para el log
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        // Corregimos el log pasando la variable username
+        log.info("Usuario {} ha cerrado sesión correctamente", username);
+
+        return ResponseEntity.ok("{\"message\": \"Logout exitoso. Token eliminado.\"}");
     }
 }
