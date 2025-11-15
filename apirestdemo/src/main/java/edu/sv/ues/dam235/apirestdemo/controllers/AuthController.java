@@ -52,4 +52,9 @@ public class AuthController {
             return ResponseEntity.internalServerError().build();
         }
     }
+    // --- ENDPOINT DE LOGOUT
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        return ResponseEntity.ok("{\"message\": \"Logout exitoso. Por favor elimine el token almacenado.\"}");
+    }
 }
