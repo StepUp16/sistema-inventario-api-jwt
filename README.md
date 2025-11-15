@@ -27,7 +27,7 @@ API RESTful robusta construida con **Spring Boot** para la gestión de inventari
 
 Para conectar el proyecto a la nube, configura `src/main/resources/application.properties`.
 
-> ⚠️ **IMPORTANTE:** Reemplaza los valores con tus credenciales reales de AWS. No subas contraseñas reales a repositorios públicos.
+> ⚠️ **IMPORTANTE:** Reemplaza los valores con tus credenciales reales de AWS.
 
 ```properties
 # Configuración del Servidor
